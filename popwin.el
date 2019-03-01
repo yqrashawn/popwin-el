@@ -339,7 +339,7 @@ bottom)."
   :type 'symbol
   :group 'popwin)
 
-(defcustom popwin:popup-window-width 30
+(defcustom popwin:popup-window-width 0.5
   "Default popup window width. If `popwin:popup-window-position'
 is top or bottom, this configuration will be ignored. If this
 variable is float, the popup window width will be a multiplier of
@@ -347,7 +347,7 @@ the value and frame-size."
   :type 'number
   :group 'popwin)
 
-(defcustom popwin:popup-window-height 15
+(defcustom popwin:popup-window-height 0.2
   "Default popup window height. If `popwin:popup-window-position'
 is left or right, this configuration will be ignored. If this
 variable is float, the popup window height will be a multiplier
@@ -498,6 +498,8 @@ window will not be selected."
     (unwind-protect
         (progn
           (when (popwin:window-deletable-p popwin:popup-window)
+            (when (first (last popwin:popup-last-config))
+              (kill-buffer (first popwin:popup-last-config)))
             (delete-window popwin:popup-window))
           (popwin:restore-window-outline (car (window-tree)) popwin:window-outline)
           ;; Call `redisplay' here so `window-start' could be set
@@ -617,7 +619,8 @@ the popup window will be closed are followings:
                              noselect
                              dedicated
                              stick
-                             tail)
+                             tail
+                             kill)
   "Show BUFFER in a popup window and return the popup window. If
 NOSELECT is non-nil, the popup window will not be selected. If
 STICK is non-nil, the popup window will be stuck. If TAIL is
@@ -657,7 +660,7 @@ BUFFER."
             popwin:popup-last-config (list buffer
                                            :width width :height height :position position
                                            :noselect noselect :dedicated dedicated
-                                           :stick stick :tail tail)
+                                           :stick stick :tail tail :kill kill)
             popwin:popup-window-dedicated-p dedicated
             popwin:popup-window-stuck-p stick)))
   (if noselect
@@ -921,7 +924,7 @@ specifies default values of the config."
           (return-from popwin:display-buffer-1
             (funcall if-config-not-found buffer))
         (setq pattern-and-keywords '(t))))
-    (destructuring-bind (&key regexp width height position noselect dedicated stick tail)
+    (destructuring-bind (&key regexp width height position noselect dedicated stick tail kill)
         (append (cdr pattern-and-keywords) default-config-keywords)
       (popwin:popup-buffer buffer
                            :width (or width popwin:popup-window-width)
@@ -930,7 +933,8 @@ specifies default values of the config."
                            :noselect (or (popwin:minibuffer-window-selected-p) noselect)
                            :dedicated dedicated
                            :stick stick
-                           :tail tail))))
+                           :tail tail
+                           :kill kill))))
 
 ;;;###autoload
 (defun popwin:display-buffer (buffer-or-name &optional not-this-window)
