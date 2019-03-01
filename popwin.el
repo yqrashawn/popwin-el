@@ -23,12 +23,12 @@
 
 ;; Popwin makes you free from the hell of annoying buffers such like
 ;; *Help*, *Completions*, *compilation*, and etc.
-;; 
+;;
 ;; To use popwin, just add the following code into your .emacs:
-;; 
+;;
 ;;     (require 'popwin)
 ;;     (popwin-mode 1)
-;; 
+;;
 ;; Then try to show some buffer, for example *Help* or
 ;; *Completeions*. Unlike standard behavior, their buffers may be
 ;; shown in a popup window at the bottom of the frame. And you can
@@ -95,7 +95,7 @@ is :error."
 (defun popwin:switch-to-buffer (buffer-or-name &optional norecord)
   "Call `switch-to-buffer' forcing BUFFER-OF-NAME be displayed in
 the selected window."
-  (with-no-warnings 
+  (with-no-warnings
     (if (>= emacs-major-version 24)
         (switch-to-buffer buffer-or-name norecord t)
       (switch-to-buffer buffer-or-name norecord))))
@@ -432,7 +432,7 @@ popup buffer.")
     (loop for var in context-vars
           collect var
           collect (symbol-value var)))
-  
+
   (defun popwin:use-context (context)
     (loop for var = (pop context)
           for val = (pop context)
@@ -835,7 +835,7 @@ buffers will be shown at the left of the frame with width 80."
             (boundp 'frame))
        ;; Use variables ACTION and FRAME which are formal parameters
        ;; of DISPLAY-BUFFER.
-       ;; 
+       ;;
        ;; TODO use display-buffer-alist instead of
        ;; display-buffer-function.
        (funcall function buffer action frame)
@@ -1091,7 +1091,7 @@ original window configuration."
     (define-key map "e"    'popwin:messages)
     (define-key map "\C-u" 'popwin:universal-display)
     (define-key map "1"    'popwin:one-window)
-    
+
     map)
   "Default keymap for popwin commands. Use like:
 \(global-set-key (kbd \"C-z\") popwin:keymap\)
