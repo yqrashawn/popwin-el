@@ -511,8 +511,8 @@ window will not be selected."
       (popwin:pop-context)
       ;; Cleanup if no context left.
       (when (null popwin:context-stack)
-        (popwin:kill-dummy-buffer)
-        (popwin:stop-close-popup-window-timer)))))
+        (popwin:stop-close-popup-window-timer)
+        (popwin:kill-dummy-buffer)))))
 
 (defun popwin:close-popup-window-if-necessary ()
   "Close the popup window if necessary. The all situations where
